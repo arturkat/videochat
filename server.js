@@ -12,22 +12,28 @@ app.use(express.static('public')) // Tell express to pull the client script from
 app.get('/', (req, res) => {
     res.redirect(`/${uuidV4()}`)
 })
+
 // If they join a specific room, then render that room
-app.get('/:room', (req, res) => {
-    res.render('room', {roomId: req.params.room})
+app.get('/:roomId', (req, res) => {
+    res.render('room', {roomId: req.params.roomId})
 })
+
 // When someone connects to the server
 io.on('connection', socket => {
+    console.log('io.on.connection')
     // When someone attempts to join the room
     socket.on('join-room', (roomId, userId) => {
+        console.log('socket.on.join-room')
         socket.join(roomId)  // Join the room
         socket.broadcast.emit('user-connected', userId) // Tell everyone else in the room that we joined
         
         // Communicate the disconnection
         socket.on('disconnect', () => {
+            console.log('socket.on.join-room.disconnect')
             socket.broadcast.emit('user-disconnected', userId)
         })
     })
 })
 
 server.listen(3000) // Run the server on the 3000 port
+
