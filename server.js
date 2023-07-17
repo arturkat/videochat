@@ -26,7 +26,7 @@ io.on('connection', socket => {
         console.log(`socket.on.join-room -> roomId: ${roomId}; userId: ${userId};`)
         socket.join(roomId)  // Join the room
         socket.broadcast.emit('user-connected', userId) // Tell everyone else in the room that we joined
-        
+
         // Communicate the disconnection
         socket.on('disconnect', () => {
             console.log('socket.on.join-room.disconnect')
