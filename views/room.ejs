@@ -6,14 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="cache-control" content="no-cache" />
 
+    <!-- Load in style.css -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Make our video grid -->
+    <div id="video-grid"></div>
+
+    <!-- Messages section -->
+    <div id="messages-container">
+        <div id="messages-output"></div>
+        <form id="messages-form">
+            <input id="messages-input" type="text" placeholder="Message..."/>
+            <button id="messages-send" type="submit">Send</button>
+        </form>
+    </div>
+
+    <div>
+        <button id="next-user">Next User</button>
+    </div>
+
+    <!-- SCRIPTS -->
     <!-- Set the ROOM_ID variable to the roomId that is passed in by server.js -->
     <script>
         const ROOM_ID = "<%= roomId %>"
     </script>
 
     <!-- Load in PeerJS library -->
-    <!--    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js" defer></script>-->
-    <!--    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>-->
     <script src="/peerjs.min.js" defer></script>
 
     <!-- Load in socket.io library -->
@@ -21,12 +40,5 @@
 
     <!-- Load in script.js, our client-side script -->
     <script src="/script.js" defer></script>
-
-    <!-- Load in style.css -->
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-    <!-- Make our video grid -->
-    <div id="video-grid"></div>
 </body>
 </html>

@@ -31,3 +31,7 @@ video {
   height: 100%;
   object-fit: cover;
 }
+
+#messages-container {
+  margin-top: 20px;
+}

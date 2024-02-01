@@ -7,10 +7,10 @@ const myVideo = document.createElement('video') // Create a new video tag to sho
 myVideo.muted = true // Mute ourselves on our end so there is no feedback loop
 
 // When we first open the app, have us join a room
-myPeer.on('open', userId => {
-    console.log(`myPeer.on.open -> userId:${userId}; ROOM_ID:${ROOM_ID};`)
-    myPeerId = userId
-    myVideo.id = userId
+myPeer.on('open', peerId => {
+    console.log(`myPeer.on.open -> peerId:${peerId}; ROOM_ID:${ROOM_ID};`)
+    myPeerId = peerId
+    myVideo.id = peerId
     myVideo.classList.add('my-video')
 })
 
@@ -38,17 +38,17 @@ navigator.mediaDevices.getUserMedia({
     })
 
     // If a new user connected
-    socket.on('user-connected', userId => {
-        console.log(`socket.on.user-connected -> userId: ${userId};`)
-        if (userId) {
-            connectToNewUser(userId, stream)
+    socket.on('user-connected', peerId => {
+        console.log(`socket.on.user-connected -> peerId: ${peerId};`)
+        if (peerId) {
+            connectToNewUser(peerId, stream)
         }
     })
 
     // Lister for when a user disconnects
-    socket.on('user-disconnected', userId => {
-        console.log(`socket.on.user-disconnected -> userId: ${userId};`)
-        let videoToRemove = document.getElementById(userId)
+    socket.on('user-disconnected', peerId => {
+        console.log(`socket.on.user-disconnected -> peerId: ${peerId};`)
+        let videoToRemove = document.getElementById(peerId)
         if (videoToRemove) {
             videoToRemove.remove()
         }
@@ -60,14 +60,14 @@ navigator.mediaDevices.getUserMedia({
     console.log('navigator.mediaDevices.getUserMedia.catch -> err: ', err)
 })
 
-function connectToNewUser(userId, stream) { // This runs when someone joins our room
-    console.log(`connectToNewUser -> userId: ${userId}; stream: ${stream};`)
+function connectToNewUser(peerId, stream) { // This runs when someone joins our room
+    console.log(`connectToNewUser -> peerId: ${peerId}; stream: ${stream};`)
 
     // Call the user who just joined
-    const call = myPeer.call(userId, stream)
+    const call = myPeer.call(peerId, stream)
     // Add their video
     const video = document.createElement('video')
-    video.id = userId
+    video.id = peerId
 
     call.on('stream', userVideoStream => {
         console.log('call.on.stream')
@@ -89,3 +89,27 @@ function addVideoStream(video, stream) {
     })
     videoGrid.append(video) // Append video element to videoGrid
 }
+
+
+// Messaging functionality
+const messagesForm = document.getElementById('messages-form');
+const messagesInput = document.getElementById('messages-input');
+const messagesOutput = document.getElementById('messages-output');
+
+messagesForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const message = messagesInput.value
+    if (!message) return
+    // socket.emit('message', message)
+    const messageEl = document.createElement('p')
+    messageEl.textContent = message
+    messagesOutput.append(messageEl)
+    messagesInput.value = ''
+});
+
+// messagesInput.addEventListener('keypress', (e) => {
+//     // if press enter key
+//     if (e.which === 13) {
+//         messagesForm.dispatchEvent(new Event('submit', {cancelable: true}))
+//     }
+// });
